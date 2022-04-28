@@ -3,10 +3,6 @@ From [SalesReport.Porfolio]..Orders ord
 Join [SalesReport.Porfolio]..Product pro
 on ord.ProductID = pro.ProductID
 
-Update [SalesReport.Porfolio]..Orders
-SET ProductID = 1021
-Where Quantity = 218
-
 --Revenue by Month
 
 Select ord.Month, Round(Sum(ord.Quantity * pro.[Price Each]),0) Revenue
@@ -50,4 +46,13 @@ group by sal.Salesperson, st.Team
 Having sum(ord.Quantity) > 10000
 order by QuantitySold desc
 
-
+select sal.Salesperson, sum(ord.Quantity) TotalQuantity, 
+case
+when sum(ord.Quantity) > 10000 then 300
+when sum(ord.Quantity) > 7000 then 100
+else 0
+end Bonus
+from [SalesReport.Porfolio]..Orders ord
+join [SalesReport.Porfolio]..Sales sal
+on ord.OrderID = sal.OrderID
+group by sal.Salesperson
